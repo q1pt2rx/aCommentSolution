@@ -435,7 +435,119 @@
     //  for a specific number y = 678
         int   integerY = 678;
         char *stringY  = "678";
+
+
+        ---------------------------------------------------------------------
+
+    a Special Note on WhiteSpace:
+
+        Obviouslly white space is at the very heart of aCS. There would be no solution
+            without a careful and meticulous application of its use. It should not be
+            surprising to learn, then, that there are many more scenarios where
+            adding a little white space can help clarify the code written.
+        
+        The first example that comes to mind is between the differnce of a function's
+            declarations, definition, and call.
+
+    //  for a declaration, that goes about main()
+        type tName(type, ... );
+    //  e.g.
+        void VMessage(int, bool);
+
+            it might not appear so, but specific choices are made here that constitute the
+                use of white space. 
+                First: there is no space between tName and ()
+                Second: only the parameter types are listed (not names);
+            Both these choices together make a declaration of a function visually distinct.
+
+
+    //  for a function call
+        tName(name, ... );
+    //  e.g.
+        vMessage(iVar, bVar);
+
+            it should be very clear what makes a call to a function unique. Both reasons
+                are just specifics of the C++ language.
+                First: there is no return type stated
+                second: only the variable names are listed for the parameters
             
+    
+    //  for a function definition
+        type tName (type name, ... ) {
+            //  body;
+        }
+    //  e.g.
+        void vMessage (int iCookies, bool bJarEmpty) {
+            //  body
+        }
+
+            finally, the definition (besides having a body), is distinct for pretty much
+                one reason that ISN'T a specific of the language
+                First: the single space between tName and ()
+            
+        It might seem like a lot of nitpicking about just a single space here or there, but 
+            can honestly make a big difference in readability, as you'll see in just a moment.
+
+        You may have realized that inside every () there are no spaces between the content and 
+            each ( or ). This is done to keep things looking clean as well as reduce the amount
+            of times the spacebar is pressed (every little bit adds up on 10,000+ lines of code)
+        The only time it's important to add space between () and content within them is if
+            the last part of the last parameter is a function call or in it's own set of ().
+            In those cases, space should be added to the front AND back of the container ().
+
+  //==  examples are obviously the best
+    //  these are BAD
+        vSomething(iVar, bVar, dGetSomeVal());
+        vSomething(iVar, bVar, dGetSomeVal() );  // no unity between front and back!
+        if (x > 1 || (x==y && x==z));
+    //  These are GOOD
+        VSomething( iVar, bVar, dGetSomeVal() );
+        if ( x > 1 || (x == y && x == Z) );
+
+            As you can see, it's important to have a visual separation of inner and outer (), 
+                and also to have unity between the first parameter and the last.
+                    It's about symmetry Folks!
+
+
+        Another place where whitespace is important is within statements that use operators
+            e.g. +, *, /, -, %, >, < etc.
+        There is visually a time and a place when it's good to have equal space on either
+            side of the operator, or asymmetry. E.g. x+2 vs. x +2
+
+    //  EQUAL SPACING
+        if (x > y);
+        if (x==y);
+        if (x == y);
+        x = a*b;
+        y /= 10;
+    //  ASSYMMETRY
+        const int g =10, h =11, ...;
+        if (x >y && x !=z)
+        for (int i= 0; i >g; i++);
+        for int i= 0; i*x <=g || i ==h; i++);
+
+            I sincerely hope that my choices above are not confusing. I won't go into much
+                detail about why equal spacing is used most often, and instead focus more 
+                on the less obvious Asymmetrical use of whitespace.
+                First: 
+                    constants are only ever used once, and I often initialize many of the 
+                    same type at once, so it's useful to reduce the code per line, as well
+                    as have a special var =# style that states visually that they are 
+                    constants
+                Second:
+                    I have learned to read the index initialized are "index get num" and 
+                    find it much easier to see it written i= #. I think it's also good not
+                    to confuse i =0 as declaration for a constant by not using it that way.
+                Third:
+                    for the condition part of a for head, I like to keep the index variable
+                    on the left by itself this time, becuase I might need to do something 
+                    fancy, like i*2. It also just makes it very clear that the right side
+                    of the operator, has to do with explicitly with the left
+                Fourth:
+                    and this has a lot to do with the Third reason. In an if condition, if 
+                    there are two or more conditions for the same variable, I like to 
+                    isolate that variable almost like in algebra e.g. 4a + 4b = 4(a+b)
+                    This is just a visual cue for readability.
 
 //++++  TODO  ++++
   ////  Class header
