@@ -121,7 +121,7 @@
 [?]     // lastly, always leave one balnk space at the end of a header comment
 [?]         // so that it remains aesthetically pleasing (it just looks wrong otherwise)
 [?]
-  \*- --- --- --- -*"/"  // make sure to end this header properly (without \ )
+  \*- --- --- --- -*"/"  // make sure to end headers properly (without "" )
                             // i can't becuase of comment in comment rules
 
     Notice the particular use of whitespace for the opening plate /*- --- ---   Title
@@ -298,7 +298,7 @@
 
         }
 
-        You should try to also notice that the function head is not preceded by a // comment
+        You should try to also notice that the function profile is not preceded by a // comment
             instead, the Header is actually doing the work of drawing attention to the 
             function, because of it's proximity and position (one level up and one blank space
             in between). Any further and it would not be noticeable, and any closer it would
@@ -449,7 +449,7 @@
         The first example that comes to mind is between the differnce of a function's
             declarations, definition, and call.
 
-    //  for a declaration, that goes about main()
+    //  for a declaration (prototype), that goes about main()
         type tName(type, ... );
     //  e.g.
         void VMessage(int, bool);
@@ -518,11 +518,12 @@
         if (x > y);
         if (x==y);
         if (x == y);
+        if (x > y || a == b);
         x = a*b;
         y /= 10;
     //  ASSYMMETRY
         const int g =10, h =11, ...;
-        if (x >y && x !=z)
+        if (x <y && x !=z)
         for (int i= 0; i >g; i++);
         for int i= 0; i*x <=g || i ==h; i++);
 
