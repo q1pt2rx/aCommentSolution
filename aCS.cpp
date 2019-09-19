@@ -525,7 +525,7 @@
         const int g =10, h =11, ...;
         if (x <y && x !=z)
         for (int i= 0; i >g; i++);
-        for int i= 0; i*x <=g || i ==h; i++);
+        for (int i= 0; i*x <=g || i ==h; i++);
 
             I sincerely hope that my choices above are not confusing. I won't go into much
                 detail about why equal spacing is used most often, and instead focus more 
