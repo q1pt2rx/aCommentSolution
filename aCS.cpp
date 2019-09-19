@@ -41,6 +41,7 @@
         int    iRadius = 1;
         double dA_r_   = 0;
 
+
     
      /*- --- ---    main
     --  
@@ -73,6 +74,7 @@
         }
 
 
+
      /*- --- ---    vGreeting
     ()  Print a standard greeting 
     ()
@@ -84,6 +86,7 @@
             cout << "I tried to make this program calculate the area of circle" << endl;
             printf("for any integer that you can think of (but only integers!)\n\n");
         }
+
 
 
      /*- --- ---    dArea
@@ -294,7 +297,7 @@
     ()
      \*- --- --- --- -*\/
 
-        type tSomeFunction (type var) {
+        type tSomeFunction (type tVar, ... ) {
 
         }
 
@@ -303,6 +306,8 @@
             function, because of it's proximity and position (one level up and one blank space
             in between). Any further and it would not be noticeable, and any closer it would
             not be appealing
+        There should also be 3 blank lines between every function (including main) and any 
+            above it. This makes it absolutely clear which function any header is attached to.
 
 
             ------------------------------------------------------------
