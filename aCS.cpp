@@ -517,7 +517,6 @@
     //  EQUAL SPACING
         if (x > y);
         if (x==y);
-        if (x == y);
         if (x > y || a == b);
         x = a*b;
         y /= 10;
