@@ -4,11 +4,14 @@
 [?]     developed to make reading code easier and
 [?]     more efficient. 
 [?]
-[?]  This multi-line header comment is an example
-[?]     of what an effective opening header would look like.
-[?]
 [?]  Detailed explanations of each component can be found 
 [?]     following the initial overview program.
+[?]
+[?]
+[?]  The program used as an exmaple is a functional
+[?]     credit payoff calculator.
+[?]  It works incrementally, rather than algebraically, 
+[?]     in order to keep track of and display many statistics.   
 [?]
 [?]         -qaptoR volArE
 [?]             2019-09-17
@@ -20,6 +23,8 @@
         #include <iostream>
         #include <cmath>
         #include <cstdio>
+        #include <string>
+        #include <cctype>
 
 //NMSP  Declare namespaces
         using namespace std;
@@ -30,16 +35,19 @@
 
 //()()  Function Declarations
         void vGreeting();
-        double dArea(int);
+        double dGetPrincipleDebt();
+        int iGetCompoundPeriod();
+        double dGetAnnualRate();
+        double dGetMonthlyPayment(double);
+        int iGetNumberOfPayments();
+        void vGetLoopProgResp(char&);
 
 //GLBC  Global Constants
-        $cd pi     = 3.1415;
-        $ci square = 2;
-        $ci cube   = 3;
+        const char ccQuit ='q', ccCont ='r';
+        
 
 //GLBV  Global Variables
-        int    iRadius = 1;
-        double dA_r_   = 0;
+        
 
 
     
@@ -54,20 +62,27 @@
         //  print greeting
             vGreeting();
 
-        //  get user input
-            printf("Please enter the radius of a circle (int): ");
-            cin >> iRadius;
+        //  Loop program from start until user chooses quit;
+            char cLoopProg;
+            do {
+            
+            //  Get Base values
+                double dPDebt   = dGetPrincipleDebt();
+                int    iComPer  = iGetCompoundPeriod();
+                double dARate   = dGetAnnualRate();
+                double dComRate = dARate /100 /iComPer;
+                
+            //  Display minimum Payment
+                double minPayment = dPDebt * dComRate;
+                printf("\n\t:|: Your minimum payment is $%.2lf\n", minPayment);
 
-    //////  find A(r); this step is important
-            dA_r_ = dArea(iRadius);
+            //  get monthly payment and # of payments to make
+                double dPayment     = dGetMonthlyPayment(minPayment);
+                int    iNumPayments = iGetNumberOfPayments();
+                
 
-      //==  display result and final message
-        //  result
-            cout << "\n\t:|: The area of your circle is " << dA_r_ << endl;
-        //  message
-            printf("\nWhoa, I guess you'll have to use a real calculator to ");
-            printf("\nfind out if that worked :P\n\n");
-
+                vGetLoopProgResp(cLoopProg);
+            } while ( tolower(cLoopProg) != ccQuit );
 
         //  end program
             return 0;
@@ -75,28 +90,189 @@
 
 
 
-     /*- --- ---    vGreeting
-    ()  Print a standard greeting 
+     /*- --- ---    vGreeting()
+    ()  Print a standard greeting to explain the program
     ()
      \*- --- --- --- -*/
 
         void vGreeting () {
-            cout << "\n\nWelcome to a simple program that does SOMETHING\n";
-            printf("I guess I should tell you what that is!\n\n");
-            cout << "I tried to make this program calculate the area of circle" << endl;
-            printf("for any integer that you can think of (but only integers!)\n\n");
+            cout << "\n\nWelcome to the Payoff Credit Calculator (PCC)!!\n\n";
+            cout << "Please be aware that this program was designed to calculate\n";
+            cout << "the length of time it will take to pay off credit card debt,\n";
+            cout << "so don't expect this to work for the nuances of mortgage loans.\n";
+            cout << "Thank you for choosing this service, I hope you enjoy\n";
+            cout << "\n\t:|: qaptoR volArP\n\n";
         }
 
 
 
-     /*- --- ---    dArea
-    ()  Calculate the area of a circle
+     /*- --- ---    dGetPrincipleDebt()
+    ()  Prompt user for Principle amount owning
+    ()      on one Credit account.
     ()
      \*- --- --- --- -*/
 
-        double dArea (int radius) {
-            return pi*pow(radius, square);
+        double dGetPrincipleDebt () {
+            double dPDebt =0;
+        //  Prompt user
+            cout << "\nPlease enter your Principle amount owing,\n";
+            cout << "Enter the number as 123 or 123.45: ";
+
+        //  loop until acceptable input is given
+            do {
+                if (!(cin >> dPDebt)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nMust enter a number as 123 or 123.45: ";
+                } else
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (dPDebt <= 0)
+                    cout << "\nYour Principle debt must exceed $0.00: ";
+            } while (dPDebt <= 0);
+
+            return dPDebt;
         }
+
+
+
+     /*- --- ---    iGetCompoundPeriod()
+    ()  Prompt user for yearly period
+    ()      i.e. # of times interest compunds per year.
+    ()
+    ()  Twelve (12) months is standard input.
+    ()
+     \*- --- --- --- -*/
+
+        int iGetCompoundPeriod () {
+            int iComPer =0;
+        //  Prompt user
+            cout << "\nPlease enter your interest Compound Period.\n";
+            cout << "This is the number of times (n) per year that you\n";
+            cout << "are expected to pay a bill. Enter as integer: ";
+
+        //  loop until acceptable input is given
+            do {
+                if (!(cin >> iComPer)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nMust enter an integer e.g. 3, 12, 52: ";
+                } else
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (iComPer <= 0)
+                    cout << "\nYour Compound Period must exceed 0: ";
+            } while (iComPer <= 0);
+            
+            return iComPer;
+        }
+
+
+
+     /*- --- ---    dGetAnnualRate()
+    ()  Prompt user for annual interest rate.
+    ()
+     \*- --- --- --- -*/
+
+        double dGetAnnualRate () {
+            double dRate =0;
+        //  Prompt user
+            cout << "\nPlease enter your Annual Interest Rate,\n";
+            cout << "Enter the number as 123 or 123.45: ";
+
+        //  loop until acceptable input is given
+            do {
+                if (!(cin >> dRate)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nMust enter a number as 123 or 1.23: ";
+                } else
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (dRate <= 0)
+                    cout << "\nYour Annual Rate must exceed 0.00%: ";
+            } while (dRate <= 0);
+
+            return dRate;
+        }
+
+
+
+     /*- --- ---    dGetMonthlyPayment()
+    ()  Prompt user for monthly Payment;
+    ()      must equal or exceed minimum.
+    ()
+     \*- --- --- --- -*/
+
+        double dGetMonthlyPayment (double dMin) {
+            double dPayment =0;
+        //  Prompt user
+            cout << "\nPlease enter your monthly payment.\n";
+            cout << "It must equal or exceed your minimum.\n";
+            cout << "Enter the number as 123 or 123.45: ";
+
+        //  loop until acceptable input is given
+            do {
+                if (!(cin >> dPayment)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nMust enter a number as 123 or 1.23: ";
+                } else
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (dPayment < dMin)
+                    printf("\nYour monthly payment must exceed $%.2lf: ", dMin);
+            } while (dPayment < dMin);
+
+            return dPayment;
+        }
+
+
+
+     /*- --- ---    iGetNumberOfPayments()
+    ()  Prompt user for the number of payments to make
+    ()
+     \*- --- --- --- -*/
+
+        int iGetNumberOfPayments () {
+            int iNumPayments =0;
+        //  Prompt user
+            cout << "\nPlease enter the number of payments you want to make.\n";
+            cout << "Enter as integer (can exceed debt owing): ";
+
+        //  loop until acceptable input is given
+            do {
+                if (!(cin >> iNumPayments)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nMust enter an integer e.g. 1, 10, 50: ";
+                } else
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (iNumPayments <= 0)
+                    cout << "\nYou must make at least one payment: ";
+            } while (iNumPayments <= 0);
+            
+            return iNumPayments;
+        }
+
+
+
+
+     /*- --- ---    vGetLoopProgResp()
+    ()  Prompts user for quit sequence;
+    ()      will only accept first character as input.
+    ()
+     \*- --- --- --- -*/
+
+        void vGetLoopProgResp (char &cVar) {
+        //  print message
+            cout << "\n\nwould you like to run the program again?";
+        //  loop getting first character and flush input buffer
+            do {
+                cout << "\nEnter  r  to run again, or  q  to quit: ";
+                cin >> cVar;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            } while (tolower(cVar) !=ccQuit && tolower(cVar) !=ccCont);
+        }
+
+
+
 
 /*---------------------------------------------------------------------------------------------
 
