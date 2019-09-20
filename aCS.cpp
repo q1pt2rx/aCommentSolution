@@ -40,6 +40,7 @@
         double dGetAnnualRate();
         double dGetMonthlyPayment(double);
         int iGetNumberOfPayments();
+        void vPrintDataHeader();
         void vGetLoopProgResp(char&);
 
 //GLBC  Global Constants
@@ -62,7 +63,7 @@
         //  print greeting
             vGreeting();
 
-        //  Loop program from start until user chooses quit;
+    //////  Loop program from start until user chooses quit;
             char cLoopProg;
             do {
             
@@ -79,8 +80,23 @@
             //  get monthly payment and # of payments to make
                 double dPayment     = dGetMonthlyPayment(minPayment);
                 int    iNumPayments = iGetNumberOfPayments();
-                
 
+        //====  loop incremental payoff of debt
+            //  initialize variables
+                int iPeriod =0, iPaymentCount;
+                double dCurBalance = dPDebt, dAmountPayed =0;
+
+          ////  loop body
+                do {
+                //  reset count of payments made
+                    iPaymentCount = 0;
+
+                //  print header for data
+                    vPrintDataHeader();
+
+                } while ();
+                
+            //  propmpt user to repeat or quit program
                 vGetLoopProgResp(cLoopProg);
             } while ( tolower(cLoopProg) != ccQuit );
 
@@ -249,6 +265,19 @@
             } while (iNumPayments <= 0);
             
             return iNumPayments;
+        }
+
+
+
+     /*- --- ---    vPrintDataHeader()
+    ()  Print Recurring header for data table
+    ()
+     \*- --- --- --- -*/
+
+        void vPrintDataHeader () {
+            cout << endl;
+            printf("Period   | Balance           | Payments\n");
+            printf("---------|-------------------|-----------\n");
         }
 
 
