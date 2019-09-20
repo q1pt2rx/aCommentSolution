@@ -23,6 +23,8 @@
         #include <iostream>
         #include <cmath>
         #include <cstdio>
+        #include <iomanip>
+        #include <sstream>
         #include <string>
         #include <cctype>
 
@@ -47,10 +49,6 @@
         const char ccQuit ='q', ccCont ='r';
         
 
-//GLBV  Global Variables
-        
-
-
     
      /*- --- ---    main
     --  
@@ -69,7 +67,9 @@
             
             //  Get Base values
                 double dPDebt   = dGetPrincipleDebt();
+                cout << to_string(dPDebt).length() << endl;
                 int    iComPer  = iGetCompoundPeriod();
+                cout << to_string(iComPer).length() <<endl;
                 double dARate   = dGetAnnualRate();
                 double dComRate = dARate /100 /iComPer;
                 
@@ -94,7 +94,23 @@
                 //  print header for data
                     vPrintDataHeader();
 
-                } while ();
+              ////  loop balance decrement
+                    while ( dCurBalance > 0 && (iPaymentCount < iNumPayments) ) {
+
+                        if (dCurBalance >= dPayment) {
+                            dCurBalance  += dCurBalance*dComRate -dPayment;
+                            dAmountPayed += dPayment;
+                        } else {
+                            dCurBalance += dCurBalance*dComRate;
+                            dAmountPayed += dCurBalance;
+                            dCurBalance -= dCurBalance;
+                        }
+
+                        iPeriod++;
+                        iPaymentCount++;
+                    }
+
+                } while ( dCurBalance > 0 && (iPaymentCount < iNumPayments) );
                 
             //  propmpt user to repeat or quit program
                 vGetLoopProgResp(cLoopProg);
