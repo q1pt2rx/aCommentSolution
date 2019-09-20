@@ -525,15 +525,16 @@
         if (x > y || a == b);
         x = a*b;
         y /= 10;
+        
     //  ASSYMMETRY
         const int g =10, h =11, ...;
-        if (x <y && x !=z)
+        if (x <y && x !=z)              // concise
+        if (  x   == y ||  x   > z )    // verbose
         for (int i= 0; i >g; i++);
         for (int i= 0; i*x <=g || i ==h; i++);
 
-            I sincerely hope that my choices above are not confusing. I won't go into much
-                detail about why equal spacing is used most often, and instead focus more 
-                on the less obvious Asymmetrical use of whitespace.
+            I won't go into much detail about why equal spacing is used most often, 
+                and instead focus more on the less obvious Asymmetrical use of whitespace.
                 First: 
                     constants are only ever used once, and I often initialize many of the 
                     same type at once, so it's useful to reduce the code per line, as well

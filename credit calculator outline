@@ -1,0 +1,40 @@
+
+
+
+
+//  Repeat program with do-while by user y/n
+
+
+      //==  Get base information
+        //  loop get principal debt            f(x) :65
+        //  --  var: initialBalance (pBal)
+        //  loop get number of yearly payments f(x) :69
+        //  --  var: period (nPay), i.e. 1/n
+        //  loop getting annual interest rate  f(x) :73
+        //  --  var: rate
+
+        //  display minimum payment               f(x) :90
+        //  loop getting adequate monthy payments f(x) :95
+        //  --  var: payments (pay)
+        //  loop getting # of payments to make    f(x) :112
+        //  --  var: numPayments (nPer)
+
+      //==  intitialize variables
+        //  int period =0, pCount;
+        //  double bal =pbal, payed =0;
+
+      //==  loop print output    f(x) :135
+        //  Print header         f(x) :139
+        //  loop print values    f(x) :145
+            //  subtract payment until balance is less than payment f(x) :149
+            //  increment counts :162
+            //  format output :165
+        //  ask for more information of balance > 0 :192
+            //  loop get new interest rate :198
+            //  display minimum payment :213
+            //  loop getting new monthly payments :218
+            //  get new number of payments :234
+
+
+        //  Display resulting stats :258
+
