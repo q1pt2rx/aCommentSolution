@@ -21,15 +21,15 @@
         //  --  var: numPayments (nPer)
 
       //==  intitialize variables
-        //  int period =0, pCount;
-        //  double bal =pbal, payed =0;
+    DONE//  int period =0, pCount;
+    DONE//  double bal =pbal, payed =0;
 
       //==  loop print output    f(x) :135
-        //  Print header         f(x) :139
+    DONE//  Print header         f(x) :139
         //  loop print values    f(x) :145
-            //  subtract payment until balance is less than payment f(x) :149
-            //  increment counts :162
-            //  format output :165
+        DONE//  subtract payment until balance is less than payment f(x) :149
+        DONE//  increment counts :162
+        DONE//  format output :165
         //  ask for more information of balance > 0 :192
             //  loop get new interest rate :198
             //  display minimum payment :213

@@ -43,10 +43,14 @@
         double dGetMonthlyPayment(double);
         int iGetNumberOfPayments();
         void vPrintDataHeader();
+        string gGetFloatString(double);
+        string gGetIntegerString(int);
+        void vPrintRowSpaces(int);
         void vGetLoopProgResp(char&);
 
 //GLBC  Global Constants
         const char ccQuit ='q', ccCont ='r';
+        const int  ciPeriodWidth =8, ciBalanceWidth =18;
         
 
     
@@ -67,18 +71,16 @@
             
             //  Get Base values
                 double dPDebt   = dGetPrincipleDebt();
-                cout << to_string(dPDebt).length() << endl;
                 int    iComPer  = iGetCompoundPeriod();
-                cout << to_string(iComPer).length() <<endl;
                 double dARate   = dGetAnnualRate();
                 double dComRate = dARate /100 /iComPer;
                 
             //  Display minimum Payment
-                double minPayment = dPDebt * dComRate;
-                printf("\n\t:|: Your minimum payment is $%.2lf\n", minPayment);
+                double dMinPayment = dPDebt * dComRate;
+                printf("\n\t:|: Your minimum payment is $%.2lf\n", dMinPayment);
 
             //  get monthly payment and # of payments to make
-                double dPayment     = dGetMonthlyPayment(minPayment);
+                double dPayment     = dGetMonthlyPayment(dMinPayment);
                 int    iNumPayments = iGetNumberOfPayments();
 
         //====  loop incremental payoff of debt
@@ -95,22 +97,57 @@
                     vPrintDataHeader();
 
               ////  loop balance decrement
-                    while ( dCurBalance > 0 && (iPaymentCount < iNumPayments) ) {
-
+                    while ( dCurBalance > 0 && (iPaymentCount< iNumPayments 
+                                                        || iNumPayments ==0) )  {
+                        
+                    //  Decrement balance
                         if (dCurBalance >= dPayment) {
                             dCurBalance  += dCurBalance*dComRate -dPayment;
                             dAmountPayed += dPayment;
                         } else {
-                            dCurBalance += dCurBalance*dComRate;
+                            dCurBalance  += dCurBalance * dComRate;
                             dAmountPayed += dCurBalance;
-                            dCurBalance -= dCurBalance;
+                            dCurBalance  -= dCurBalance;
                         }
-
+                    //  increse counts
                         iPeriod++;
                         iPaymentCount++;
+
+                    //  Convert numbers to strings
+                        string gBalance = gGetFloatString(dCurBalance);
+                        string gAmountPayed = gGetFloatString(dAmountPayed);
+                        string gPeriod  = gGetIntegerString(iPeriod);
+
+                  //==  Print table Row
+                        cout << " " << gPeriod;
+                        vPrintRowSpaces( ciPeriodWidth -gPeriod.length() );
+                        
+                        cout << "| $" << gBalance;
+                        vPrintRowSpaces( ciBalanceWidth -gBalance.length() );
+
+                        cout << "| $" << gAmountPayed << "\n";
+
+
+
+                    //  Reset base valies until balance is payed
+                        if (dCurBalance > 0) {
+                            iPeriod = 0;
+
+                            dARate = dGetAnnualRate();
+                            dComRate = dARate /100 /iComPer;
+                            dMinPayment = dCurBalance *dComRate;
+
+                            printf("\n\n\t:|: Your new minimum payment is ");
+                            printf("$%.2lf\n", dMinPayment);
+
+                            dPayment = dGetMonthlyPayment(dMinPayment);
+                            iNumPayments = iGetNumberOfPayments();
+                        }
+
                     }
 
-                } while ( dCurBalance > 0 && (iPaymentCount < iNumPayments) );
+                } while ( dCurBalance > 0 && (iPaymentCount< iNumPayments 
+                                                    || iNumPayments ==0) );
                 
             //  propmpt user to repeat or quit program
                 vGetLoopProgResp(cLoopProg);
@@ -152,7 +189,7 @@
 
         //  loop until acceptable input is given
             do {
-                if (!(cin >> dPDebt)) {
+                if ( !(cin >> dPDebt) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 123.45: ";
@@ -184,7 +221,7 @@
 
         //  loop until acceptable input is given
             do {
-                if (!(cin >> iComPer)) {
+                if ( !(cin >> iComPer) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter an integer e.g. 3, 12, 52: ";
@@ -212,7 +249,7 @@
 
         //  loop until acceptable input is given
             do {
-                if (!(cin >> dRate)) {
+                if ( !(cin >> dRate) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 1.23: ";
@@ -242,7 +279,7 @@
 
         //  loop until acceptable input is given
             do {
-                if (!(cin >> dPayment)) {
+                if ( !(cin >> dPayment) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 1.23: ";
@@ -266,6 +303,7 @@
             int iNumPayments =0;
         //  Prompt user
             cout << "\nPlease enter the number of payments you want to make.\n";
+            cout << "Enter zero to pay continuously until balance is payed\n";
             cout << "Enter as integer (can exceed debt owing): ";
 
         //  loop until acceptable input is given
@@ -276,9 +314,9 @@
                     cout << "\nMust enter an integer e.g. 1, 10, 50: ";
                 } else
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                if (iNumPayments <= 0)
+                if (iNumPayments < 0)
                     cout << "\nYou must make at least one payment: ";
-            } while (iNumPayments <= 0);
+            } while (iNumPayments < 0);
             
             return iNumPayments;
         }
@@ -286,7 +324,7 @@
 
 
      /*- --- ---    vPrintDataHeader()
-    ()  Print Recurring header for data table
+    ()  Print Recurring header for data table.
     ()
      \*- --- --- --- -*/
 
@@ -296,6 +334,48 @@
             printf("---------|-------------------|-----------\n");
         }
 
+
+
+     /*- --- ---    gGetFloatString()
+    ()  Convert floating point balance to string
+    ()      for printing data table.
+    ()
+     \*- --- --- --- -*/
+
+        string gGetFloatString (double dFloat) {
+            stringstream ssConvFloat;
+            ssConvFloat << fixed << setprecision(2) << dFloat;
+            string gFloat = ssConvFloat.str();
+            return gFloat;
+        }
+
+
+
+     /*- --- ---    gGetIntegerString()
+    ()  Convert period number to string
+    ()      for printing data table.
+    ()
+     \*- --- --- --- -*/
+
+        string gGetIntegerString (int iInteger) {
+            stringstream ssConvInt;
+            ssConvInt << iInteger;
+            string gInteger = ssConvInt.str();
+            return gInteger;
+        }
+
+
+
+     /*- --- ---    vPrintRowSpaces()
+    ()  Print spaces to format table rows
+    ()      into columns.
+    ()
+     \*- --- --- --- -*/
+
+        void vPrintRowSpaces (int iWidth) {
+            for (int i= 0; i <iWidth; i++)
+                cout << " ";
+        }
 
 
 
@@ -753,6 +833,7 @@
         if (  x   == y ||  x   > z )    // verbose
         for (int i= 0; i >g; i++);
         for (int i= 0; i*x <=g || i ==h; i++);
+        while ( !(this == that) )  {}   // two spaces between ) and {}
 
             I won't go into much detail about why equal spacing is used most often, 
                 and instead focus more on the less obvious Asymmetrical use of whitespace.
