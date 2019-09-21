@@ -22,4 +22,4 @@ I learn more languages and/or others collaborate with their knowledge.
 Marsin leibh drasda
 
 
-qaptoR volArP
+qaptoR volArEy
