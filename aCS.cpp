@@ -83,15 +83,15 @@
                 double dPayment     = dGetMonthlyPayment(dMinPayment);
                 int    iNumPayments = iGetNumberOfPayments();
 
-        //====  loop incremental payoff of debt
+//============  loop incremental payoff of debt
             //  initialize variables
-                int iPeriod =0, iPaymentCount;
+                int iPeriod =0, iPaymentCount =0;
                 double dCurBalance = dPDebt, dAmountPayed =0;
 
-          ////  loop body
+      ////////  loop body
                 do {
                 //  reset count of payments made
-                    iPaymentCount = 0;
+                    //iPaymentCount = 0;
 
                 //  print header for data
                     vPrintDataHeader();
@@ -109,7 +109,8 @@
                             dAmountPayed += dCurBalance;
                             dCurBalance  -= dCurBalance;
                         }
-                    //  increse counts
+
+                    //  increase counts
                         iPeriod++;
                         iPaymentCount++;
 
@@ -118,7 +119,7 @@
                         string gAmountPayed = gGetFloatString(dAmountPayed);
                         string gPeriod  = gGetIntegerString(iPeriod);
 
-                  //==  Print table Row
+                    //  Print table Row
                         cout << " " << gPeriod;
                         vPrintRowSpaces( ciPeriodWidth -gPeriod.length() );
                         
@@ -126,29 +127,32 @@
                         vPrintRowSpaces( ciBalanceWidth -gBalance.length() );
 
                         cout << "| $" << gAmountPayed << "\n";
-
-
-
-                    //  Reset base valies until balance is payed
-                        if (dCurBalance > 0) {
-                            iPeriod = 0;
-
-                            dARate = dGetAnnualRate();
-                            dComRate = dARate /100 /iComPer;
-                            dMinPayment = dCurBalance *dComRate;
-
-                            printf("\n\n\t:|: Your new minimum payment is ");
-                            printf("$%.2lf\n", dMinPayment);
-
-                            dPayment = dGetMonthlyPayment(dMinPayment);
-                            iNumPayments = iGetNumberOfPayments();
-                        }
-
                     }
 
+                    //  Reset base valies until balance is payed
+                    if (dCurBalance > 0) {
+                        iPaymentCount =0;
+
+                        dARate = dGetAnnualRate();
+                        dComRate = dARate /100 /iComPer;
+                        dMinPayment = dCurBalance *dComRate;
+
+                        printf("\n\n\t:|: Your new minimum payment is ");
+                        printf("$%.2lf\n", dMinPayment);
+
+                        dPayment = dGetMonthlyPayment(dMinPayment);
+                        iNumPayments = iGetNumberOfPayments();
+                    }
+                    
                 } while ( dCurBalance > 0 && (iPaymentCount< iNumPayments 
                                                     || iNumPayments ==0) );
                 
+                cout << "\n\n\t:|: It took " << iPeriod/iComPer << " years and "
+                        << iPeriod%iComPer << " payments to pay off your debt.\n";
+                cout << "\t:|: You payed $" << gGetFloatString(dAmountPayed-dPDebt)
+                        << " in interest.\n";
+
+
             //  propmpt user to repeat or quit program
                 vGetLoopProgResp(cLoopProg);
             } while ( tolower(cLoopProg) != ccQuit );
@@ -189,12 +193,25 @@
 
         //  loop until acceptable input is given
             do {
+
+            //  return input back to console after piped file reaches EOF
+                if ( cin.eof() )  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
                 if ( !(cin >> dPDebt) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 123.45: ";
-                } else
+                } else {
+                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+
                 if (dPDebt <= 0)
                     cout << "\nYour Principle debt must exceed $0.00: ";
             } while (dPDebt <= 0);
@@ -221,12 +238,24 @@
 
         //  loop until acceptable input is given
             do {
+            //  return input back to console after piped file reaches EOF
+                if ( cin.eof() )  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
                 if ( !(cin >> iComPer) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter an integer e.g. 3, 12, 52: ";
-                } else
+                } else {
+                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+
                 if (iComPer <= 0)
                     cout << "\nYour Compound Period must exceed 0: ";
             } while (iComPer <= 0);
@@ -249,12 +278,24 @@
 
         //  loop until acceptable input is given
             do {
+            //  return input back to console after piped file reaches EOF
+                if ( cin.eof() )  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
                 if ( !(cin >> dRate) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 1.23: ";
-                } else
+                } else {
+                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+
                 if (dRate <= 0)
                     cout << "\nYour Annual Rate must exceed 0.00%: ";
             } while (dRate <= 0);
@@ -279,12 +320,24 @@
 
         //  loop until acceptable input is given
             do {
+            //  return input back to console after piped file reaches EOF
+                if ( cin.eof() )  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
                 if ( !(cin >> dPayment) )  {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter a number as 123 or 1.23: ";
-                } else
+                } else {
+                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+
                 if (dPayment < dMin)
                     printf("\nYour monthly payment must exceed $%.2lf: ", dMin);
             } while (dPayment < dMin);
@@ -308,12 +361,24 @@
 
         //  loop until acceptable input is given
             do {
+            //  return input back to console after piped file reaches EOF
+                if ( cin.eof() )  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
                 if (!(cin >> iNumPayments)) {
                     cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     cout << "\nMust enter an integer e.g. 1, 10, 50: ";
-                } else
+                } else {
+                    cin.clear();
                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                
                 if (iNumPayments < 0)
                     cout << "\nYou must make at least one payment: ";
             } while (iNumPayments < 0);
@@ -330,8 +395,8 @@
 
         void vPrintDataHeader () {
             cout << endl;
-            printf("Period   | Balance           | Payments\n");
-            printf("---------|-------------------|-----------\n");
+            printf("Period   | Balance            | Payments\n");
+            printf("---------|--------------------|-----------\n");
         }
 
 
@@ -388,11 +453,27 @@
         void vGetLoopProgResp (char &cVar) {
         //  print message
             cout << "\n\nwould you like to run the program again?";
+            cout << "\nEnter  r  to run again, or  q  to quit: "; 
+
         //  loop getting first character and flush input buffer
             do {
-                cout << "\nEnter  r  to run again, or  q  to quit: ";
-                cin >> cVar;
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            //  return input back to console after piped file reaches EOF
+                if ( cin.peek() ==EOF)  {
+                    cout << "\nAfter EOF, enter any value to continue: ";
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    freopen("CONIN$", "r", stdin);
+                }
+
+
+                if ( !(cin >> cVar) )  {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "\nEnter  r  to run again, or  q  to quit: ";           
+                } else {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
             } while (tolower(cVar) !=ccQuit && tolower(cVar) !=ccCont);
         }
 
